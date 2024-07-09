@@ -38,7 +38,10 @@ func TestCyrillicToRoman(t *testing.T) {
 	f("быстрый", "bystryj")
 	f("яблоко", "Abloko")
 	f("Яблоко", "Abloko")
+	f("Подъезд", "pod\"ezd")
+	f("держаться", "derxat'sA")
 	f("привет", "privet")
+	f("щёлкать", "Welkat'")
 	f("foo", "foo")
 	f("s',", "s',")
 }
@@ -54,4 +57,6 @@ func Test_romanToCyrillic(t *testing.T) {
 	f("bystryj", "быстрый")
 	f("Abloko", "яблоко")
 	f("privet", "привет")
+	f("pod\"ezd", "подъезд")
+	f("derxat'sA", "держаться")
 }
