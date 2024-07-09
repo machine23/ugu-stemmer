@@ -61,6 +61,56 @@ func (s *RussianStemmer) IsStopWord(word string) bool {
 	return found
 }
 
+var russianVowelSet = map[rune]bool{
+	'A': true,
+	'U': true,
+	'E': true,
+	'a': true,
+	'e': true,
+	'i': true,
+	'o': true,
+	'u': true,
+	'y': true,
+}
+
+func russianRegions(word string) (string, string) {
+	r1Start, r2Start, rvStart := len(word), len(word), len(word)
+
+	// Find RV
+	for i, r := range word {
+		if _, isVowel := russianVowelSet[r]; isVowel {
+			rvStart = i + 1
+			break
+		}
+	}
+
+	// Find R1 and R2 in a single pass
+	for i := rvStart; i < len(word)-1; i++ {
+		if _, isVowelCurr := russianVowelSet[rune(word[i])]; !isVowelCurr {
+			if _, isVowelPrev := russianVowelSet[rune(word[i-1])]; isVowelPrev {
+				if r1Start == len(word) { // First time finding R1
+					r1Start = i + 1
+				} else if i > r1Start { // Finding R2
+					r2Start = i + 1
+					break
+				}
+			}
+		}
+	}
+
+	// Slicing strings based on calculated positions
+	rv := ""
+	r2 := ""
+	if rvStart < len(word) {
+		rv = word[rvStart:]
+	}
+	if r2Start < len(word) {
+		r2 = word[r2Start:]
+	}
+
+	return rv, r2
+}
+
 var cyrillicToLatinMap = map[rune]rune{
 	'а': 'a', 'б': 'b', 'в': 'v', 'г': 'g', 'д': 'd',
 	'е': 'e', 'ё': 'e', 'ж': 'x', 'з': 'z', 'и': 'i',
