@@ -1,5 +1,7 @@
 package ugustemmer
 
+import "github.com/machine23/ugu-stemmer/stemmer"
+
 type Stemmer interface {
 	Stem(word string) string
 }
@@ -26,7 +28,9 @@ type SnowballStemmer struct {
 //   - "da" (Danish) - not implemented
 //   - "fi" (Finnish) - not implemented
 func NewSnowballStemmer(lang string) *SnowballStemmer {
-	stemmers := map[string]Stemmer{}
+	stemmers := map[string]Stemmer{
+		"ru": stemmer.NewRussianStemmer(),
+	}
 	stemmer, ok := stemmers[lang]
 	if !ok {
 		return nil
