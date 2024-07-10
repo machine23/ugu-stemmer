@@ -64,7 +64,8 @@ func Test_romanToCyrillic(t *testing.T) {
 func TestRussianStemmer_regions(t *testing.T) {
 	f := func(word, rv, r2 string) {
 		t.Helper()
-		nrv, nr2 := russianRegions(word)
+		s := NewRussianStemmer()
+		nrv, nr2 := s.regions(word)
 		require.Equal(t, rv, nrv)
 		require.Equal(t, r2, nr2)
 	}

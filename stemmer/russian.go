@@ -44,7 +44,7 @@ func NewRussianStemmer() *RussianStemmer {
 }
 
 // Stem returns the stem of the given word.
-func (s *RussianStemmer) Stem(word string) string {
+func (s RussianStemmer) Stem(word string) string {
 	if s.IsStopWord(word) {
 		return word
 	}
@@ -56,7 +56,7 @@ func (s *RussianStemmer) Stem(word string) string {
 }
 
 // IsStopWord returns true if the given word is a stop word.
-func (s *RussianStemmer) IsStopWord(word string) bool {
+func (s RussianStemmer) IsStopWord(word string) bool {
 	_, found := slices.BinarySearch(s.stopWords, strings.ToLower(word))
 	return found
 }
@@ -73,7 +73,7 @@ var russianVowelSet = map[rune]bool{
 	'y': true,
 }
 
-func russianRegions(word string) (string, string) {
+func (s RussianStemmer) regions(word string) (string, string) {
 	r1Start, r2Start, rvStart := len(word), len(word), len(word)
 
 	// Find RV
