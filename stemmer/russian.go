@@ -563,7 +563,7 @@ func NewRussianStemmer() *RussianStemmer {
 // Stem returns the stem of the given word.
 func (s RussianStemmer) Stem(word string) string {
 	word = strings.ToLower(word)
-	if s.IsStopWord(word) {
+	if s.isStopWord(word) {
 		return word
 	}
 
@@ -692,8 +692,8 @@ func (s RussianStemmer) step4(word string) string {
 	return word
 }
 
-// IsStopWord returns true if the given word is a stop word.
-func (s RussianStemmer) IsStopWord(word string) bool {
+// isStopWord returns true if the given word is a stop word.
+func (s RussianStemmer) isStopWord(word string) bool {
 	_, found := slices.BinarySearch(s.stopWords, word)
 	return found
 }

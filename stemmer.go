@@ -20,7 +20,7 @@ type SnowballStemmer struct {
 //   - "fr" (French) - not implemented
 //   - "it" (Italian) - not implemented
 //   - "pt" (Portuguese) - not implemented
-//   - "ru" (Russian) - not implemented
+//   - "ru" (Russian)
 //   - "de" (German) - not implemented
 //   - "nl" (Dutch) - not implemented
 //   - "sv" (Swedish) - not implemented

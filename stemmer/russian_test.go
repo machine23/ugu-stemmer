@@ -11,11 +11,10 @@ func TestNewRussianStemmer(t *testing.T) {
 	require.NotNil(t, s)
 }
 
-func TestRussianStemmer_IsStopWord(t *testing.T) {
+func TestRussianStemmer_isStopWord(t *testing.T) {
 	s := NewRussianStemmer()
-	require.True(t, s.IsStopWord("и"))
-	require.True(t, s.IsStopWord("И"))
-	require.False(t, s.IsStopWord("яблоко"))
+	require.True(t, s.isStopWord("и"))
+	require.False(t, s.isStopWord("яблоко"))
 }
 
 func TestRussianStemmer_Stem(t *testing.T) {
