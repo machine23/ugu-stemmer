@@ -31,7 +31,7 @@ var (
 		"всегда", "конечно", "всю", "между",
 	}
 
-	perfectiveSuffixes = []string{
+	ruPerfectiveSuffixes = []string{
 		"ivwis'",
 		"yvwis'",
 		"vwis'",
@@ -43,7 +43,7 @@ var (
 		"v",
 	}
 
-	adjectivalSuffixes = []string{
+	ruAdjectivalSuffixes = []string{
 		"uUWUU",
 		"uUWAA",
 		"uUWimi",
@@ -280,7 +280,7 @@ var (
 		"om",
 	}
 
-	adjectivalSuffixes2 = []string{
+	ruAdjectivalSuffixes2 = []string{
 		"UWUU",
 		"UWAA",
 		"UWuU",
@@ -413,12 +413,12 @@ var (
 		"nnom",
 	}
 
-	reflexiveSuffixes = []string{
+	ruReflexiveSuffixes = []string{
 		"sA",
 		"s'",
 	}
 
-	verbSuffixes = []string{
+	ruVerbSuffixes = []string{
 		"ew'",
 		"ejte",
 		"ujte",
@@ -467,7 +467,7 @@ var (
 		"n",
 	}
 
-	verbSuffixes2 []string = []string{
+	ruVerbSuffixes2 []string = []string{
 		"la",
 		"na",
 		"ete",
@@ -487,7 +487,7 @@ var (
 		"nno",
 	}
 
-	nounSuffixes = []string{
+	ruNounSuffixes = []string{
 		"iAmi",
 		"iAh",
 		"Ami",
@@ -526,8 +526,8 @@ var (
 		"'",
 	}
 
-	superlativeSuffixes  = []string{"ejwe", "ejw"}
-	derivationalSuffixes = []string{"ost'", "ost"}
+	ruSuperlativeSuffixes  = []string{"ejwe", "ejw"}
+	ruDerivationalSuffixes = []string{"ost'", "ost"}
 )
 
 type RussianStemmer struct {
@@ -548,10 +548,10 @@ func NewRussianStemmer() *RussianStemmer {
 	sww := ruStopWords
 	slices.Sort(sww)
 
-	adjs2 := adjectivalSuffixes2
+	adjs2 := ruAdjectivalSuffixes2
 	slices.Sort(adjs2)
 
-	verb2 := verbSuffixes2
+	verb2 := ruVerbSuffixes2
 	slices.Sort(verb2)
 	return &RussianStemmer{
 		stopWords:           sww,
@@ -579,7 +579,7 @@ func (s RussianStemmer) Stem(word string) string {
 }
 
 func (s RussianStemmer) step1(word, rv, r2 string) (string, string, string) {
-	for _, suffix := range perfectiveSuffixes {
+	for _, suffix := range ruPerfectiveSuffixes {
 		if strings.HasSuffix(rv, suffix) {
 			suffixLen := len(suffix)
 			if suffix == "v" || suffix == "vwi" || suffix == "vwis'" {
@@ -592,14 +592,14 @@ func (s RussianStemmer) step1(word, rv, r2 string) (string, string, string) {
 		}
 	}
 
-	for _, suffix := range reflexiveSuffixes {
+	for _, suffix := range ruReflexiveSuffixes {
 		if strings.HasSuffix(rv, suffix) {
 			word, rv, r2 = s.trimSuffix(word, rv, r2, suffix)
 			break
 		}
 	}
 
-	for _, suffix := range adjectivalSuffixes {
+	for _, suffix := range ruAdjectivalSuffixes {
 		if strings.HasSuffix(rv, suffix) {
 			suffixLen := len(suffix)
 			_, found := slices.BinarySearch(s.adjectivalSuffixes2, suffix)
@@ -613,7 +613,7 @@ func (s RussianStemmer) step1(word, rv, r2 string) (string, string, string) {
 		}
 	}
 
-	for _, suffix := range verbSuffixes {
+	for _, suffix := range ruVerbSuffixes {
 		if strings.HasSuffix(rv, suffix) {
 			suffixLen := len(suffix)
 			if _, found := slices.BinarySearch(s.verbSuffixes2, suffix); found {
@@ -626,7 +626,7 @@ func (s RussianStemmer) step1(word, rv, r2 string) (string, string, string) {
 		}
 	}
 
-	for _, suffix := range nounSuffixes {
+	for _, suffix := range ruNounSuffixes {
 		if strings.HasSuffix(rv, suffix) {
 			return s.trimSuffix(word, rv, r2, suffix)
 		}
@@ -658,7 +658,7 @@ func (s RussianStemmer) step2(word, rv, r2 string) (string, string) {
 }
 
 func (s RussianStemmer) step3(word, r2 string) string {
-	for _, suffix := range derivationalSuffixes {
+	for _, suffix := range ruDerivationalSuffixes {
 		if strings.HasSuffix(r2, suffix) {
 			return word[:len(word)-len(suffix)]
 		}
@@ -673,7 +673,7 @@ func (s RussianStemmer) step4(word string) string {
 		return word[:len(word)-1]
 	}
 
-	for _, suffix := range superlativeSuffixes {
+	for _, suffix := range ruSuperlativeSuffixes {
 		if strings.HasSuffix(word, suffix) {
 			word = word[:len(word)-len(suffix)]
 			superlativeRemoved = true
