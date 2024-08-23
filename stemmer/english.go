@@ -808,23 +808,31 @@ func (s EnglishStemmer) replaceYAfterVowel(word string) string {
 }
 
 func (s EnglishStemmer) r1r2Standard(word string) (string, string) {
-	r1 := ""
-	r2 := ""
+	var r1Start, r2Start int
+	wordRunes := []rune(word)
+	wordLen := len(wordRunes)
 
-	// Find R1
-	for i := 1; i < len(word); i++ {
-		if !s.isVowel(rune(word[i])) && s.isVowel(rune(word[i-1])) {
-			r1 = word[i+1:]
-			break
+	// Initialize R1 and R2 to the end of the word
+	r1Start, r2Start = wordLen, wordLen
+
+	// Find R1 and R2 in a single pass
+	for i := 1; i < wordLen; i++ {
+		if r1Start == wordLen && !s.isVowel(wordRunes[i]) && s.isVowel(wordRunes[i-1]) {
+			r1Start = i + 1
+		} else if r1Start < wordLen && r2Start == wordLen && !s.isVowel(wordRunes[i]) && s.isVowel(wordRunes[i-1]) {
+			r2Start = i + 1
+			break // No need to continue after finding R2
 		}
 	}
 
-	// Find R2
-	for i := 1; i < len(r1); i++ {
-		if !s.isVowel(rune(r1[i])) && s.isVowel(rune(r1[i-1])) {
-			r2 = r1[i+1:]
-			break
-		}
+	r1 := ""
+	if r1Start < wordLen {
+		r1 = string(wordRunes[r1Start:])
+	}
+
+	r2 := ""
+	if r2Start < wordLen {
+		r2 = string(wordRunes[r2Start:])
 	}
 
 	return r1, r2
