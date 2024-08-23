@@ -344,3 +344,20 @@ func TestEnglishStemmer_Stem(t *testing.T) {
 	f("wagner", "wagner")
 	f("wagon", "wagon")
 }
+
+func BenchmarkEnglishStemmer_Stem(b *testing.B) {
+	stemmer := &EnglishStemmer{}
+
+	words := []string{
+		"running", "jumps", "easily", "generous", "communicate", "arsenal",
+		"cats", "dogs", "happily", "flying", "crying", "studies",
+	}
+
+	for _, word := range words {
+		b.Run(word, func(b *testing.B) {
+			for i := 0; i < b.N; i++ {
+				stemmer.Stem(word)
+			}
+		})
+	}
+}
