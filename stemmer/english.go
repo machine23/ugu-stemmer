@@ -195,6 +195,12 @@ func (s *EnglishStemmer) Stem(word string) string {
 
 	word = s.normalizeApostrophes(word)
 
+	if strings.HasPrefix(word, "y") {
+		word = "Y" + word[1:]
+	}
+
+	word = s.replaceYAfterVowel(word)
+
 	return word
 }
 
@@ -223,4 +229,28 @@ func (s EnglishStemmer) normalizeApostrophes(word string) string {
 	}
 
 	return nw
+}
+
+func (s EnglishStemmer) isVowel(r rune) bool {
+	switch r {
+	case 'a', 'e', 'i', 'o', 'u':
+		return true
+	default:
+		return false
+	}
+}
+
+func (s EnglishStemmer) replaceYAfterVowel(word string) string {
+	var builder strings.Builder
+	builder.Grow(len(word))
+
+	for i, r := range word {
+		if r == 'y' && i > 0 && s.isVowel(rune(word[i-1])) {
+			builder.WriteRune('Y')
+		} else {
+			builder.WriteRune(r)
+		}
+	}
+
+	return builder.String()
 }
